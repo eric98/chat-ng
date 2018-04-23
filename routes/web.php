@@ -29,3 +29,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/chat/{chat}/message', 'ChatMessageController@create');
 });
+
+// Push Subscriptions
+Route::post('subscriptions', 'PushSubscriptionController@update');
+Route::post('subscriptions/delete', 'PushSubscriptionController@destroy');

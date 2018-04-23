@@ -17,5 +17,7 @@ class ChatMessageController extends Controller
     public function create(Request $request, Chat $chat)
     {
         $chat->addMessage($request->body);
+
+        // TODO New Broadcast Event -> Notifications push
     }
 }
