@@ -6,11 +6,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="user" content="{{ formatted_logged_user() }}">
 
+    <!-- Scripts -->
     <script>
       window.Laravel = {!! json_encode([
-            'vapidPublicKey' => config('webpush.vapid.public_key'),
+            'vapidPublicKey' => config('webpush.vapid.public_key')
         ]) !!};
     </script>
+
 
     <link href="{{ mix('/css/all.css') }}" rel="stylesheet" type="text/css" />
 
@@ -25,8 +27,8 @@
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
     <script>
-        //See https://laracasts.com/discuss/channels/vue/use-trans-in-vuejs
-        window.trans = @php
+      //See https://laracasts.com/discuss/channels/vue/use-trans-in-vuejs
+      window.trans = @php
             // copy all translations from /resources/lang/CURRENT_LOCALE/* to global JS variable
             $lang_files = File::files(resource_path() . '/lang/' . App::getLocale());
             $trans = [];
