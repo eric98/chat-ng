@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Chat;
+use App\Events\newChatMessage;
 use Illuminate\Http\Request;
 
 /**
@@ -16,8 +17,12 @@ class ChatMessageController extends Controller
      */
     public function create(Request $request, Chat $chat)
     {
-        $chat->addMessage($request->body);
+        $message = $request->body;
 
-        // TODO New Broadcast Event -> Notifications push
+        event(new newChatMessage($chat,$message));
+
+        $chat->addMessage($message);
+
+//        Notification::send(Auth::user(),new ChatMessage($request->body));
     }
 }

@@ -296,6 +296,10 @@
     mounted () {
       this.scroll_top_down()
       this.registerServiceWorker()
+      Echo.channel('newChatMessage.'+this.chat.id)
+        .listen('newChatMessage', e => {
+          console.log('nou missatge al chat')
+        })
     },
   }
 </script>

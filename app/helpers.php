@@ -44,12 +44,8 @@ if (!function_exists('create_test_database')) {
                     'updated_at' => $randomDate
                 ]);
             }
-
-
 //        echo $now->format('F'); // July
 //        echo $now->subMonth()->format('F'); // June
-
-
         }
     }
 }
