@@ -216,7 +216,8 @@
       },
       send() {
         axios.post('/chat/' + this.chat.id + '/message', {
-          'body': this.message
+          'body': this.message,
+          'user' : this.logged_user,
         }).then(response => {
           const message = {
             'body':  this.message,
@@ -228,8 +229,8 @@
               'id': this.logged_user.id
             }
           }
-          console.log('MESSAGE:')
-          console.log(message)
+//          console.log('MESSAGE:')
+//          console.log(message)
           this.internalMessages.push(message)
         }).catch(error => {
           console.log('Error')
@@ -298,7 +299,20 @@
       this.registerServiceWorker()
       Echo.channel('newChatMessage.'+this.chat.id)
         .listen('newChatMessage', e => {
-          console.log('nou missatge al chat')
+          const message = {
+            'body':  e.message,
+            'chat_id': e.chat.id,
+            'formatted_created_at_date': this.timestamp(),
+            user: {
+              'name': e.user.name,
+              'avatar': e.user.avatar,
+              'id': e.user.id
+            }
+          }
+          this.chat.messages.push(message)
+          Vue.nextTick(() => {
+            this.scroll_top_down()
+          })
         })
     },
   }
