@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Chat;
 use App\Events\newChatMessage;
+use Gravatar;
 use Illuminate\Http\Request;
 
 /**
@@ -19,6 +20,7 @@ class ChatMessageController extends Controller
     {
         $message = $request->body;
         $user = $request->user;
+        $user['avatar'] = Gravatar::get($user['email']);
 
         event((new newChatMessage($chat,$message,$user))->dontBroadcastToCurrentUser());
 

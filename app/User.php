@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Gravatar;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use NotificationChannels\WebPush\HasPushSubscriptions;
@@ -27,6 +28,16 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function toArray()
+    {
+        return [
+            'id'          => $this->id,
+            'name'        => $this->name,
+            'email'        => $this->email,
+            'avatar'        => Gravatar::get($this->email)
+        ];
+    }
 
     /**
      * formatted_created_at_date attribute.
