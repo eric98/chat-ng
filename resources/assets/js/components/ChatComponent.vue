@@ -62,6 +62,8 @@
                 :class="{ 'btn-primary': !isPushEnabled, 'btn-danger': isPushEnabled }">
             {{ isPushEnabled ? 'Disable' : 'Enable' }} Push Notifications
         </button>
+        <button @click="viewHtmlChat" class="btn btn-success fa  fa-print"></button>
+        <button @click="downloadPdf" class="btn btn-warning fa  fa-file-pdf-o"></button>
     </div>
 </template>
 
@@ -229,8 +231,6 @@
               'id': this.logged_user.id
             }
           }
-//          console.log('MESSAGE:')
-//          console.log(message)
           this.internalMessages.push(message)
         }).catch(error => {
           console.log('Error')
@@ -293,6 +293,12 @@
             })
         })
       },
+      downloadPdf() {
+        window.location.href = this.chat.id + '/pdf'
+      },
+      viewHtmlChat() {
+        window.location.href = this.chat.id + '/view'
+      }
     },
     mounted () {
       this.scroll_top_down()
