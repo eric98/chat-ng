@@ -24,7 +24,6 @@ class ChatMessageController extends Controller
     {
         $message = $request->body;
         $user = $request->user;
-        $user['avatar'] = Gravatar::get($user['email']);
 
         event((new newChatMessage($chat,$message,$user))->dontBroadcastToCurrentUser());
         Notification::send(User::all(), new ChatMessage($user['name'],$message,Carbon::now()));

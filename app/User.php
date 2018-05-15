@@ -35,7 +35,7 @@ class User extends Authenticatable
             'id'          => $this->id,
             'name'        => $this->name,
             'email'        => $this->email,
-            'avatar'        => Gravatar::get($this->email)
+            'avatar'        => $this->avatar
         ];
     }
 

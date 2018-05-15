@@ -39,7 +39,7 @@
                                   {{ participant.name }}
                                   <small class="contacts-list-date pull-right">{{ participant.created_at }}</small>
                                 </span>
-                                    <span class="contacts-list-msg">TODO...</span>
+                                    <span class="contacts-list-msg">{{ participant.email }}</span>
                                 </div>
                             </a>
                         </li>
@@ -319,6 +319,15 @@
           Vue.nextTick(() => {
             this.scroll_top_down()
           })
+        })
+        .here(users => {
+          this.participants = users
+        })
+        .joining(user => {
+          this.participants.push(user)
+        })
+        .leaving(user => {
+          this.participants.splice(this.participants.indexOf(user),1)
         })
     },
   }

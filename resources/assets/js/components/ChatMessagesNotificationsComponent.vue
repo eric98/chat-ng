@@ -15,7 +15,8 @@
                             </div>
                             <h4>
                                 {{ message.user }}
-                                <small><i class="fa fa-clock-o"></i>{{ message.created_at }}</small>
+                                <small><i class="fa fa-clock-o"></i>{{ moment(message.created_at).format('LL') }}</small>
+                                <!--<small><i class="fa fa-clock-o"></i>{{ moment().duration(message.created_at).humanize() }}</small>-->
                             </h4>
                             <p>{{ message.text }}</p>
                         </a>
@@ -32,6 +33,7 @@
 </style>
 
 <script>
+  var moment = require('moment');
   import axios from 'axios'
   export default {
     data() {
@@ -46,6 +48,9 @@
       }
     },
     methods: {
+      moment: function () {
+        return moment();
+      },
       llegirNotificacio(missatge) {
         var notificacioALlegir = this.notifications.find((notification) => {
           if (missatge==notification.data){

@@ -1,3 +1,5 @@
+<title>{{$chat->name}}.pdf</title>
+
 <h1>{{ $chat->name }}</h1>
 
 @foreach ($chat->messages as $missatge)
