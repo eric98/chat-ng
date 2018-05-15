@@ -2,13 +2,13 @@
     <li class="dropdown messages-menu">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-envelope-o"></i>
-            <span class="label label-success">4</span>
+            <span class="label label-success">{{this.internalMessages.length}}</span>
         </a>
         <ul class="dropdown-menu">
-            <li class="header">Tens 4 missatges de xat pendents</li>
+            <li class="header">Tens {{this.internalMessages.length}} missatges de xat pendents</li>
             <li>
                 <ul class="menu">
-                    <li v-for="message in internalMessages">
+                    <li v-for="message in internalMessages" @click="llegirNotificacio(message)">
                         <a href="#">
                             <div class="pull-left">
                                 <img src="/img/photo1.png" class="img-circle" alt="User Image"/>
@@ -32,37 +32,41 @@
 </style>
 
 <script>
+  import axios from 'axios'
   export default {
     data() {
       return {
-        internalMessages: this.messages
-//        internalMessages: [
-//          {
-//            user:'Pepito',
-//            text:'Que paixa tio!',
-//            created_at:'1 minute ago',
-//          },
-//          {
-//            user:'Maria',
-//            text:'Que paixa tio!',
-//            created_at:'1 minute ago',
-//          },
-//          {
-//            user:'Quim',
-//            text:'Que paixa tio!',
-//            created_at:'1 minute ago',
-//          }
-//        ]
+        internalMessages: []
       }
     },
     props: {
-      messages: {
+      notifications: {
         type: Array,
         required: true
       }
     },
+    methods: {
+      llegirNotificacio(missatge) {
+        var notificacioALlegir = this.notifications.find((notification) => {
+          if (missatge==notification.data){
+            return notification
+          }
+        })
+        var index = this.internalMessages.indexOf(missatge)
+
+        axios.post('/notifications/'+notificacioALlegir.id+'/read')
+          .then(
+            this.internalMessages.splice(index, 1)
+        )
+      },
+      getMessagesOfNotifications(notifications) {
+        notifications.forEach((notification) => {
+          this.internalMessages.push(notification.data)
+        })
+      }
+    },
     mounted() {
-      console.log('Mounted ok')
+      this.getMessagesOfNotifications(this.notifications)
     }
   }
 </script>

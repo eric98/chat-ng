@@ -34,6 +34,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/statistics','MonthlyStatisticController@show');
 
+    Route::post('/notifications/{notification}/read','ReadNotificationController@update');
+
 });
 
 // Push Subscriptions

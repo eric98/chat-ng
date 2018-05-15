@@ -53,12 +53,12 @@ class User extends Authenticatable
     {
         return $this->notifications->map(function ($notification) {
         {
-            //$data = json_decode($notification->data);
-            return [
+            $data = [
                 'user' => $notification->data['user'],
                 'text' => $notification->data['text'],
                 'created_at' => $notification->data['created_at'],
             ];
+            return $data;
         }
     });
     }

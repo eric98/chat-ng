@@ -39,6 +39,6 @@ class newChatMessage implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel("newChatMessage.{$this->chat->id}");
+        return new PresenceChannel("newChatMessage.{$this->chat->id}");
     }
 }

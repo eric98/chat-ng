@@ -20,7 +20,7 @@
             <ul class="nav navbar-nav">
                 <!-- Messages: style can be found in dropdown.less-->
 
-                <chat-messages-notifications :messages="{{ Auth::user()->formatted_notifications() }}"></chat-messages-notifications>
+                <chat-messages-notifications :notifications="{{ Auth::user()->unreadNotifications }}"></chat-messages-notifications>
 
                 <!-- Notifications Menu -->
                 <li class="dropdown notifications-menu">
@@ -40,8 +40,8 @@
                                     </a>
                                 </li><!-- end notification -->
                             </ul>
-                        </li>
-                        <li class="footer"><a href="#">{{ trans('adminlte_lang::message.viewall') }}</a></li>
+                        <li class="footer"><a href="#">{{ trans('admi
+                        </li>nlte_lang::message.viewall') }}</a></li>
                     </ul>
                 </li>
                 <!-- Tasks Menu -->

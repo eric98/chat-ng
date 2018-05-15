@@ -16,5 +16,5 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('newChatMessage.{chat}', function ($chat, $user) {
-    return true;
+    return Auth::user();
 });
