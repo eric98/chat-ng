@@ -23,7 +23,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="footer"><a href="#">Veure totes</a></li>
+            <li class="footer" @click="llegirTotes()"><a href="#">Llegir totes</a></li>
         </ul>
     </li>
 </template>
@@ -51,6 +51,12 @@
       moment: function () {
         return moment();
       },
+      llegirTotes() {
+        this.notifications.forEach((notification) => {
+          axios.post('/notifications/'+notification.id+'/read')
+        })
+        this.internalMessages = []
+      },
       llegirNotificacio(missatge) {
         var notificacioALlegir = this.notifications.find((notification) => {
           if (missatge==notification.data){
@@ -65,6 +71,7 @@
         )
       },
       getMessagesOfNotifications(notifications) {
+        this.internalMessages = []
         notifications.forEach((notification) => {
           this.internalMessages.push(notification.data)
         })
@@ -72,6 +79,23 @@
     },
     mounted() {
       this.getMessagesOfNotifications(this.notifications)
+      Echo.join('newChatMessage.1')
+        .listen('newChatMessage', e => {
+//          console.log('Nova notificacio')
+          const message = {
+            'body':  e.message,
+            'chat_id': e.chat.id,
+            'formatted_created_at_date': this.timestamp(),
+            user: {
+              'name': e.user.name,
+              'avatar': e.user.avatar,
+              'id': e.user.id
+            }
+          }
+          console.log(this.internalMessages)
+          this.internalMessages.push()
+          console.log('notificacions actualitzades!')
+        })
     }
   }
 </script>
