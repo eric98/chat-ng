@@ -6,6 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use NotificationChannels\WebPush\WebPushMessage;
+use NotificationChannels\WebPush\WebPushChannel;
 
 class ChatMessage extends Notification
 {
@@ -37,7 +39,7 @@ class ChatMessage extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database','broadcast',WebPushChannel::class];
     }
 
     /**
@@ -67,5 +69,22 @@ class ChatMessage extends Notification
             'text' => $this->text,
             'created_at' => $this->created_at,
         ];
+    }
+
+    /**
+     * Get the web push representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @param  mixed  $notification
+     * @return \Illuminate\Notifications\Messages\DatabaseMessage
+     */
+    public function toWebPush($notifiable, $notification)
+    {
+        return (new WebPushMessage)
+            ->title('Hello from Laravel!')
+            ->icon('/notification-icon.png')
+            ->body('Thank you for using our application.')
+            ->action('View app', 'view_app')
+            ->data(['id' => $notification->id]);
     }
 }

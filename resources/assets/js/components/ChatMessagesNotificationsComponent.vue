@@ -1,14 +1,14 @@
 <template>
-    <li class="dropdown messages-menu">
+    <li v-if="this.seeUnreadMessages" class="dropdown messages-menu">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-envelope-o"></i>
-            <span class="label label-success">{{this.internalMessages.length}}</span>
+            <span class="label label-success">{{this.unreadMessages.length}}</span>
         </a>
         <ul class="dropdown-menu">
-            <li class="header">Tens {{this.internalMessages.length}} missatges de xat pendents</li>
+            <li class="header">Tens {{this.unreadMessages.length}} missatges de xat pendents</li>
             <li>
                 <ul class="menu">
-                    <li v-for="message in internalMessages" @click="llegirNotificacio(message)">
+                    <li v-for="message in unreadMessages" @click="llegirNotificacio(message)">
                         <a href="#">
                             <div class="pull-left">
                                 <img src="/img/photo1.png" class="img-circle" alt="User Image"/>
@@ -23,6 +23,35 @@
                     </li>
                 </ul>
             </li>
+            <li class="footer" @click="mostrarTotes()"><a href="#">Veure totes</a></li>
+            <li class="footer" @click="llegirTotes()"><a href="#">Llegir totes</a></li>
+        </ul>
+    </li>
+    <li v-else="this.seeUnreadMessages" class="dropdown messages-menu">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-envelope-o"></i>
+            <span class="label label-success">{{this.totalMessages.length}}</span>
+        </a>
+        <ul class="dropdown-menu">
+            <li class="header">Tens {{this.totalMessages.length}} missatges de xat pendents</li>
+            <li>
+                <ul class="menu">
+                    <li v-for="message in totalMessages" @click="llegirNotificacio(message)">
+                        <a href="#">
+                            <div class="pull-left">
+                                <img src="/img/photo1.png" class="img-circle" alt="User Image"/>
+                            </div>
+                            <h4>
+                                {{ message.user }}
+                                <small><i class="fa fa-clock-o"></i>{{ moment(message.created_at).format('LL') }}</small>
+                                <!--<small><i class="fa fa-clock-o"></i>{{ moment().duration(message.created_at).humanize() }}</small>-->
+                            </h4>
+                            <p>{{ message.text }}</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li v-if="!this.seeUnreadMessages" class="footer" @click="mostrarNoLlegides()"><a href="#">Veure No Llegides</a></li>
             <li class="footer" @click="llegirTotes()"><a href="#">Llegir totes</a></li>
         </ul>
     </li>
@@ -38,7 +67,9 @@
   export default {
     data() {
       return {
-        internalMessages: []
+        unreadMessages: [],
+        totalMessages: [],
+        seeUnreadMessages: true,
       }
     },
     props: {
@@ -51,11 +82,17 @@
       moment: function () {
         return moment();
       },
+      mostrarNoLlegides(){
+        this.seeUnreadMessages = true;
+      },
+      mostrarTotes(){
+        this.seeUnreadMessages = false;
+      },
       llegirTotes() {
         this.notifications.forEach((notification) => {
           axios.post('/notifications/'+notification.id+'/read')
         })
-        this.internalMessages = []
+        this.unreadMessages = []
       },
       llegirNotificacio(missatge) {
         var notificacioALlegir = this.notifications.find((notification) => {
@@ -63,17 +100,20 @@
             return notification
           }
         })
-        var index = this.internalMessages.indexOf(missatge)
+        var index = this.unreadMessages.indexOf(missatge)
 
         axios.post('/notifications/'+notificacioALlegir.id+'/read')
           .then(
-            this.internalMessages.splice(index, 1)
+            this.unreadMessages.splice(index, 1)
         )
       },
       getMessagesOfNotifications(notifications) {
-        this.internalMessages = []
+        this.unreadMessages = []
         notifications.forEach((notification) => {
-          this.internalMessages.push(notification.data)
+          if (notification.read_at==null) {
+            this.unreadMessages.push(notification.data)
+          }
+          this.totalMessages.push(notification.data)
         })
       }
     },
@@ -92,8 +132,8 @@
               'id': e.user.id
             }
           }
-          console.log(this.internalMessages)
-          this.internalMessages.push()
+          console.log(this.unreadMessages)
+          this.unreadMessages.push()
           console.log('notificacions actualitzades!')
         })
     }

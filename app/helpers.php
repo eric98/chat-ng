@@ -32,20 +32,60 @@ if (!function_exists('create_test_database')) {
     {
         $now = Carbon::now();
 
+        $chat = Chat::forceCreate(['name' => 'Chat001' ]);
+
         foreach (range(1, $now->month) as $month) {
             dump('Month: ' . $month);
-            foreach (range(1, rand(50, 1000)) as $user) {
+            foreach (range(1, rand(17, 333)) as $user) {
                 dump('Creating user number ' , $user);
                 dump($randomDate = randomDate(
                     Carbon::createFromDate(null, $month, 1)->startOfMonth(),
                     Carbon::createFromDate(null, $month, 1)->endOfMonth()));
-                factory(User::class)->create([
+                $user = factory(User::class)->create([
                     'created_at' => $randomDate,
                     'updated_at' => $randomDate
                 ]);
+                $chat->addMessage('Hola que tal cracks!',$user);
+                dump('Chat001.missatge: Hola que tal cracks! -> ' . $user->name);
             }
-//        echo $now->format('F'); // July
-//        echo $now->subMonth()->format('F'); // June
+        }
+
+        $chat = Chat::forceCreate(['name' => 'Chat002' ]);
+
+        foreach (range(1, $now->month) as $month) {
+            dump('Month: ' . $month);
+            foreach (range(1, rand(17, 333)) as $user) {
+                dump('Creating user number ' , $user);
+                dump($randomDate = randomDate(
+                    Carbon::createFromDate(null, $month, 1)->startOfMonth(),
+                    Carbon::createFromDate(null, $month, 1)->endOfMonth()));
+                $user = factory(User::class)->create([
+                    'created_at' => $randomDate,
+                    'updated_at' => $randomDate
+                ]);
+                $chat->addMessage('Adeu màquina!',$user);
+                dump('Chat002.missatge: Adeu màquina! -> ' . $user->name);
+
+            }
+        }
+
+        $chat = Chat::forceCreate(['name' => 'Chat003' ]);
+
+        foreach (range(1, $now->month) as $month) {
+            dump('Month: ' . $month);
+            foreach (range(1, rand(17, 333)) as $user) {
+                dump('Creating user number ' , $user);
+                dump($randomDate = randomDate(
+                    Carbon::createFromDate(null, $month, 1)->startOfMonth(),
+                    Carbon::createFromDate(null, $month, 1)->endOfMonth()));
+                $user = factory(User::class)->create([
+                    'created_at' => $randomDate,
+                    'updated_at' => $randomDate
+                ]);
+                $chat->addMessage('Jeje',$user);
+                dump('Chat003.missatge: Jeje! -> ' . $user->name);
+
+            }
         }
     }
 }
@@ -92,5 +132,23 @@ if (!function_exists('formatted_logged_user')) {
     {
         if(!Auth::user()) return new GuestUser();
         return json_encode((new UserResource(Auth::user()))->resolve());
+    }
+}
+
+if (!function_exists('get_new_users_by_month')) {
+    function get_new_users_by_month($year, $month)
+    {
+        if ($month==0){
+            $month = 12;
+            $year = $year-1;
+        }
+        if ($month<10){
+            $month = "0".$month;
+        }
+        $month=(string)$month;
+        $year=(string)$year;
+
+        $users = DB::table('users')->whereYear('created_at', $year)->whereMonth('created_at', $month)->get();
+        dump($users);
     }
 }
