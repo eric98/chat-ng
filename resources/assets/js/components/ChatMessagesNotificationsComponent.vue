@@ -119,6 +119,7 @@
     },
     mounted() {
       this.getMessagesOfNotifications(this.notifications)
+      console.log(this.notifications)
       Echo.join('newChatMessage.1')
         .listen('newChatMessage', e => {
 //          console.log('Nova notificacio')

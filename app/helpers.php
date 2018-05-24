@@ -36,7 +36,7 @@ if (!function_exists('create_test_database')) {
 
         foreach (range(1, $now->month) as $month) {
             dump('Month: ' . $month);
-            foreach (range(1, rand(17, 333)) as $user) {
+            foreach (range(1, rand(10, 100)) as $user) {
                 dump('Creating user number ' , $user);
                 dump($randomDate = randomDate(
                     Carbon::createFromDate(null, $month, 1)->startOfMonth(),
@@ -54,7 +54,7 @@ if (!function_exists('create_test_database')) {
 
         foreach (range(1, $now->month) as $month) {
             dump('Month: ' . $month);
-            foreach (range(1, rand(17, 333)) as $user) {
+            foreach (range(1, rand(10, 100)) as $user) {
                 dump('Creating user number ' , $user);
                 dump($randomDate = randomDate(
                     Carbon::createFromDate(null, $month, 1)->startOfMonth(),
@@ -73,7 +73,7 @@ if (!function_exists('create_test_database')) {
 
         foreach (range(1, $now->month) as $month) {
             dump('Month: ' . $month);
-            foreach (range(1, rand(17, 333)) as $user) {
+            foreach (range(1, rand(10, 100)) as $user) {
                 dump('Creating user number ' , $user);
                 dump($randomDate = randomDate(
                     Carbon::createFromDate(null, $month, 1)->startOfMonth(),
@@ -138,6 +138,8 @@ if (!function_exists('formatted_logged_user')) {
 if (!function_exists('get_new_users_by_month')) {
     function get_new_users_by_month($year, $month)
     {
+        Artisan::call('cache:clear');
+
         if ($month==0){
             $month = 12;
             $year = $year-1;
@@ -150,5 +152,12 @@ if (!function_exists('get_new_users_by_month')) {
 
         $users = DB::table('users')->whereYear('created_at', $year)->whereMonth('created_at', $month)->get();
         dump($users);
+    }
+}
+
+if (!function_exists('generate_statistics_chat')) {
+    function generate_statistics_chat()
+    {
+        // TODO
     }
 }

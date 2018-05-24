@@ -81,8 +81,8 @@ class ChatMessage extends Notification
     public function toWebPush($notifiable, $notification)
     {
         return (new WebPushMessage)
-            ->title('Hello from Laravel!')
-            ->icon('/notification-icon.png')
+            ->title('Nova notificació al chat!')
+//            ->icon('/notification-icon.png')
             ->body('Thank you for using our application.')
             ->action('View app', 'view_app')
             ->data(['id' => $notification->id]);
