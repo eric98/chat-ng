@@ -14,6 +14,7 @@ class ChatMessage extends Notification
     use Queueable;
 
     public $user;
+    public $chat;
     public $text;
     public $created_at;
 
@@ -23,9 +24,10 @@ class ChatMessage extends Notification
      * @param $text
      * @param $created_at
      */
-    public function __construct($user, $text, $created_at)
+    public function __construct($user, $chat, $text, $created_at)
     {
         $this->user = $user;
+        $this->chat = $chat;
         $this->text = $text;
         $this->created_at = $created_at;
     }
@@ -66,6 +68,7 @@ class ChatMessage extends Notification
     {
         return [
             'user' => $this->user,
+            'chat' => $this->chat,
             'text' => $this->text,
             'created_at' => $this->created_at,
         ];
@@ -81,9 +84,10 @@ class ChatMessage extends Notification
     public function toWebPush($notifiable, $notification)
     {
         return (new WebPushMessage)
-            ->title('Nova notificació al chat!')
+            ->title($this->chat->name)
 //            ->icon('/notification-icon.png')
-            ->body('Thank you for using our application.')
+            ->body($this->user)
+//            ->body($this->text)
             ->action('View app', 'view_app')
             ->data(['id' => $notification->id]);
     }
