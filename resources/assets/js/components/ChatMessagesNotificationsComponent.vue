@@ -11,14 +11,14 @@
                     <li v-for="message in unreadMessages" @click="llegirNotificacio(message)">
                         <a href="#">
                             <div class="pull-left">
-                                <img src="/img/photo1.png" class="img-circle" alt="User Image"/>
+                                <img v-bind:src="message.user['avatar']" class="img-circle" alt="User Image"/>
                             </div>
                             <h4>
-                                {{ message.user }}
+                                {{ message.user.name }}
                                 <small><i class="fa fa-clock-o"></i>{{ moment(message.created_at).format('LL') }}</small>
-                                <!--<small><i class="fa fa-clock-o"></i>{{ moment().duration(message.created_at).humanize() }}</small>-->
                             </h4>
                             <p>{{ message.text }}</p>
+                            <p>{{ message.chat.name }}</p>
                         </a>
                     </li>
                 </ul>
@@ -39,14 +39,15 @@
                     <li v-for="message in totalMessages" @click="llegirNotificacio(message)">
                         <a href="#">
                             <div class="pull-left">
-                                <img src="/img/photo1.png" class="img-circle" alt="User Image"/>
+                                <img v-bind:src="message.user['avatar']" class="img-circle" alt="User Image"/>
                             </div>
                             <h4>
-                                {{ message.user }}
+                                {{ message.user['name'] }}
                                 <small><i class="fa fa-clock-o"></i>{{ moment(message.created_at).format('LL') }}</small>
-                                <!--<small><i class="fa fa-clock-o"></i>{{ moment().duration(message.created_at).humanize() }}</small>-->
                             </h4>
                             <p>{{ message.text }}</p>
+                            <p>{{ message.chat.name }}</p>
+
                         </a>
                     </li>
                 </ul>
@@ -122,7 +123,6 @@
       console.log(this.notifications)
       Echo.join('newChatMessage.1')
         .listen('newChatMessage', e => {
-//          console.log('Nova notificacio')
           const message = {
             'body':  e.message,
             'chat_id': e.chat.id,
