@@ -29,10 +29,7 @@ class ChatMessageController extends Controller
         $users = User::where('id', '!=', Auth::id())->get();
 
         event((new newChatMessage($chat,$message,$user))->dontBroadcastToCurrentUser());
-//        Notification::send(User::all(), new ChatMessage($user['name'],$message,Carbon::now()));
-        Notification::send(User::all(), new ChatMessage($user,$chat,$message,Carbon::now()));
-//        Notification::send(User::all(), new ChatMessage($user['name'],$chat,$message,Carbon::now()));
-//        Notification::send($users, new ChatMessage($user['name'],$message,Carbon::now()));
+        Notification::send($users, new ChatMessage($user,$chat,$message,Carbon::now()));
 
         $chat->addMessage($message);
     }

@@ -116,27 +116,27 @@
           }
           this.totalMessages.push(notification.data)
         })
-      }
+      },
+      timestamp() {
+        return moment().format('YYYY-MM-DD hh:mm:ss')
+      },
     },
     mounted() {
       this.getMessagesOfNotifications(this.notifications)
-      console.log(this.notifications)
       Echo.join('newChatMessage.1')
         .listen('newChatMessage', e => {
-          console.log('hola que tal')
           const message = {
-            'body':  e.message,
-            'chat_id': e.chat.id,
-            'formatted_created_at_date': this.timestamp(),
-            user: {
-              'name': e.user.name,
-              'avatar': e.user.avatar,
-              'id': e.user.id
+            chat: e.chat,
+            text: e.message,
+            user: e.user,
+            created_at: {
+              date: this.timestamp(),
+              timezone: "UTC",
+              timezone_type: 3
             }
           }
-          console.log(this.unreadMessages)
-          this.unreadMessages.push()
-          console.log('notificacions actualitzades!')
+          this.unreadMessages.push(message)
+          this.totalMessages.push(message)
         })
     }
   }

@@ -305,6 +305,7 @@
       this.registerServiceWorker()
       Echo.join('newChatMessage.'+this.chat.id)
         .listen('newChatMessage', e => {
+          console.log(e)
           const message = {
             'body':  e.message,
             'chat_id': e.chat.id,
