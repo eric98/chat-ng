@@ -51,7 +51,10 @@
                     <input type="text" name="message" placeholder="Type Message ..." class="form-control" v-model="message" @keyup.enter.prevent="send">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-warning btn-flat" @click.prevent="send" >Send</button>
-                      </span>
+                    </span>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-info btn-flat" @click.prevent="sendFile"><i class="fa fa-paperclip"></i></button>
+                    </span>
                 </div>
             </div>
         </div>
@@ -215,6 +218,9 @@
 
       own(message) {
         return message.user.id === this.logged_user.id
+      },
+      sendFile(){
+
       },
       send() {
         axios.post('/chat/' + this.chat.id + '/message', {

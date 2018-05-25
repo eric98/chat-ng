@@ -20,7 +20,7 @@
             <ul class="nav navbar-nav">
                 <!-- Messages: style can be found in dropdown.less-->
 
-                <chat-messages-notifications :notifications="{{ Auth::user()->notifications }}"></chat-messages-notifications>
+                <chat-messages-notifications :user="{{ Auth::user() }}" :notifications="{{ Auth::user()->notifications }}"></chat-messages-notifications>
 
                 <!-- Notifications Menu -->
                 <li class="dropdown notifications-menu">

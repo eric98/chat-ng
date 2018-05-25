@@ -77,6 +77,9 @@
       notifications: {
         type: Array,
         required: true
+      },
+      user: {
+        required: true
       }
     },
     methods: {
@@ -123,12 +126,12 @@
     },
     mounted() {
       this.getMessagesOfNotifications(this.notifications)
-      Echo.join('newChatMessage.1')
-        .listen('newChatMessage', e => {
+      Echo.private(`App.User.${this.user.id}`)
+        .notification((notification) => {
           const message = {
-            chat: e.chat,
-            text: e.message,
-            user: e.user,
+            chat: notification.chat,
+            text: notification.message,
+            user: notification.user,
             created_at: {
               date: this.timestamp(),
               timezone: "UTC",
@@ -137,7 +140,7 @@
           }
           this.unreadMessages.push(message)
           this.totalMessages.push(message)
-        })
+        });
     }
   }
 </script>
