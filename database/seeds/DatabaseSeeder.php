@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         inititalize_test_database();
 
-        create_test_database();
-        generate_statistics_chat();
+//        create_test_database();
+//        generate_statistics_chat();
     }
 }
