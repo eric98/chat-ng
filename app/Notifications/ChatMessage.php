@@ -86,7 +86,7 @@ class ChatMessage extends Notification
         return (new WebPushMessage)
             ->title($this->chat->name)
             ->icon($this->user['avatar'])
-            ->body($this->user['name'])
+            ->body($this->user['name'].': '.$this->text)
             ->action('Veure Aplicació', 'view_app')
             ->data(['id' => $notification->id]);
     }
