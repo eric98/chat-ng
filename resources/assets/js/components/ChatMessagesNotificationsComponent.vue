@@ -123,6 +123,7 @@
       console.log(this.notifications)
       Echo.join('newChatMessage.1')
         .listen('newChatMessage', e => {
+          console.log('hola que tal')
           const message = {
             'body':  e.message,
             'chat_id': e.chat.id,

@@ -47,14 +47,16 @@ if (!function_exists('create_test_database')) {
                     'created_at' => $randomDate,
                     'updated_at' => $randomDate
                 ]);
-                $ChatMessage = new ChatMessage([
-                    'body' => 'Hola que tal cracks!',
-                    'user_id' => $user->id,
-                    'created_at' => $randomDate,
-                    'updated_at' => $randomDate
-                ]);
-                $chat->messages()->save($ChatMessage);
-                dump('Chat001.missatge: Hola que tal cracks! -> ' . $user->name);
+                for ($i = 0; $i < rand(0,5); $i++) {
+                    $ChatMessage = new ChatMessage([
+                        'body' => 'Hola que tal cracks!',
+                        'user_id' => $user->id,
+                        'created_at' => $randomDate,
+                        'updated_at' => $randomDate
+                    ]);
+                    $chat->messages()->save($ChatMessage);
+                    dump('Chat001.missatge: Hola que tal cracks! -> ' . $user->name);
+                }
             }
         }
 
@@ -71,15 +73,16 @@ if (!function_exists('create_test_database')) {
                     'created_at' => $randomDate,
                     'updated_at' => $randomDate
                 ]);
-                $ChatMessage = new ChatMessage([
-                    'body' => 'Adeu màquina!',
-                    'user_id' => $user->id,
-                    'created_at' => $randomDate,
-                    'updated_at' => $randomDate
-                ]);
-                $chat->messages()->save($ChatMessage);
-                dump('Chat002.missatge: Adeu màquina! -> ' . $user->name);
-
+                for ($i = 0; $i < rand(0,5); $i++) {
+                    $ChatMessage = new ChatMessage([
+                        'body' => 'Adeu màquina!',
+                        'user_id' => $user->id,
+                        'created_at' => $randomDate,
+                        'updated_at' => $randomDate
+                    ]);
+                    $chat->messages()->save($ChatMessage);
+                    dump('Chat002.missatge: Adeu màquina! -> ' . $user->name);
+                }
             }
         }
 
@@ -96,15 +99,16 @@ if (!function_exists('create_test_database')) {
                     'created_at' => $randomDate,
                     'updated_at' => $randomDate
                 ]);
-                $ChatMessage = new ChatMessage([
-                    'body' => 'Jeje',
-                    'user_id' => $user->id,
-                    'created_at' => $randomDate,
-                    'updated_at' => $randomDate
-                ]);
-                $chat->messages()->save($ChatMessage);
-                dump('Chat003.missatge: Jeje! -> ' . $user->name);
-
+                for ($i = 0; $i < rand(0,5); $i++) {
+                    $ChatMessage = new ChatMessage([
+                        'body' => 'Jeje',
+                        'user_id' => $user->id,
+                        'created_at' => $randomDate,
+                        'updated_at' => $randomDate
+                    ]);
+                    $chat->messages()->save($ChatMessage);
+                    dump('Chat003.missatge: Jeje! -> ' . $user->name);
+                }
             }
         }
     }
