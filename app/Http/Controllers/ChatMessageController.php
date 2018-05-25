@@ -28,8 +28,14 @@ class ChatMessageController extends Controller
         $participants = $request->participants;
         unset($participants[array_search($user['name'], $participants)]);
 
+        foreach ($participants as $participant){
+            if ($participant['id'] != $user['id']) {
+                $userNotify = User::findOrFail($participant['id']);
+                $userNotify->notify(new ChatMessage($user, $chat, $message, Carbon::now()));
+            }
+        }
+
         event((new newChatMessage($chat,$message,$user))->dontBroadcastToCurrentUser());
-        Notification::send($participants, new ChatMessage($user,$chat,$message,Carbon::now()));
 
         $chat->addMessage($message);
     }
