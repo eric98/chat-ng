@@ -226,6 +226,7 @@
         axios.post('/chat/' + this.chat.id + '/message', {
           'body': this.message,
           'user' : this.logged_user,
+          'participants': this.participants
         }).then(response => {
           const message = {
             'body':  this.message,
@@ -311,7 +312,6 @@
       this.registerServiceWorker()
       Echo.join('newChatMessage.'+this.chat.id)
         .listen('newChatMessage', e => {
-          console.log(e)
           const message = {
             'body':  e.message,
             'chat_id': e.chat.id,
