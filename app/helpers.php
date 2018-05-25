@@ -3,6 +3,7 @@
 use Acacha\User\GuestUser;
 use App\Chat;
 use App\Http\Resources\UserResource;
+use App\MonthlyStatistic;
 use App\User;
 use Carbon\Carbon;
 
@@ -135,29 +136,38 @@ if (!function_exists('formatted_logged_user')) {
     }
 }
 
-if (!function_exists('get_new_users_by_month')) {
-    function get_new_users_by_month($year, $month)
+if (!function_exists('generate_statistics_chat')) {
+    function generate_statistics_chat_at_month($year, $month)
     {
         Artisan::call('cache:clear');
 
-        if ($month==0){
-            $month = 12;
-            $year = $year-1;
-        }
         if ($month<10){
             $month = "0".$month;
         }
         $month=(string)$month;
         $year=(string)$year;
 
-        $users = DB::table('users')->whereYear('created_at', $year)->whereMonth('created_at', $month)->get();
-        dump($users);
+        MonthlyStatistic::forceCreate([
+            'year' => intval($year),
+            'month' => intval($month),
+            'new_users' =>  DB::table('users')->whereYear('created_at', $year)->whereMonth('created_at', $month)->get()->count(),
+            'total_users' => DB::table('users')
+                ->whereYear('created_at', '<=',$year)
+                ->whereMonth('created_at','<=',$month)
+                ->get()->count(),
+            'chat_messages' => DB::table('chat_messages')
+                ->whereYear('created_at',$year)
+                ->whereMonth('created_at',$month)
+                ->get()->count(),
+        ]);
     }
 }
 
 if (!function_exists('generate_statistics_chat')) {
-    function generate_statistics_chat()
-    {
-        // TODO
+    function generate_statistics_chat() {
+        for ($i = 1; $i < Carbon::now()->month; $i++) {
+            $year = Carbon::now()->year;
+            generate_statistics_chat_at_month($year, $i);
+        }
     }
 }
