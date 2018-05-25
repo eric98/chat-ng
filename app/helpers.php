@@ -2,6 +2,7 @@
 
 use Acacha\User\GuestUser;
 use App\Chat;
+use App\ChatMessage;
 use App\Http\Resources\UserResource;
 use App\MonthlyStatistic;
 use App\User;
@@ -46,7 +47,13 @@ if (!function_exists('create_test_database')) {
                     'created_at' => $randomDate,
                     'updated_at' => $randomDate
                 ]);
-                $chat->addMessage('Hola que tal cracks!',$user);
+                $ChatMessage = new ChatMessage([
+                    'body' => 'Hola que tal cracks!',
+                    'user_id' => $user->id,
+                    'created_at' => $randomDate,
+                    'updated_at' => $randomDate
+                ]);
+                $chat->messages()->save($ChatMessage);
                 dump('Chat001.missatge: Hola que tal cracks! -> ' . $user->name);
             }
         }
@@ -64,7 +71,13 @@ if (!function_exists('create_test_database')) {
                     'created_at' => $randomDate,
                     'updated_at' => $randomDate
                 ]);
-                $chat->addMessage('Adeu màquina!',$user);
+                $ChatMessage = new ChatMessage([
+                    'body' => 'Adeu màquina!',
+                    'user_id' => $user->id,
+                    'created_at' => $randomDate,
+                    'updated_at' => $randomDate
+                ]);
+                $chat->messages()->save($ChatMessage);
                 dump('Chat002.missatge: Adeu màquina! -> ' . $user->name);
 
             }
@@ -83,7 +96,13 @@ if (!function_exists('create_test_database')) {
                     'created_at' => $randomDate,
                     'updated_at' => $randomDate
                 ]);
-                $chat->addMessage('Jeje',$user);
+                $ChatMessage = new ChatMessage([
+                    'body' => 'Jeje',
+                    'user_id' => $user->id,
+                    'created_at' => $randomDate,
+                    'updated_at' => $randomDate
+                ]);
+                $chat->messages()->save($ChatMessage);
                 dump('Chat003.missatge: Jeje! -> ' . $user->name);
 
             }
@@ -166,8 +185,7 @@ if (!function_exists('generate_statistics_chat')) {
 if (!function_exists('generate_statistics_chat')) {
     function generate_statistics_chat() {
         for ($i = 1; $i < Carbon::now()->month; $i++) {
-            $year = Carbon::now()->year;
-            generate_statistics_chat_at_month($year, $i);
+            generate_statistics_chat_at_month(Carbon::now()->year, $i);
         }
     }
 }
