@@ -23,6 +23,7 @@
                         </div>
                         <img class="direct-chat-img" :src="message.user.avatar" alt="message user image">
                         <div class="direct-chat-text">
+                            <button v-if="isFirefox" type="button" class="btn btn-primary btn-flat" @click.prevent="playMessageAsAudio(message.body,true)"><i class="fa fa-play"></i></button>
                             {{ message.body }}
                         </div>
                     </div>
@@ -51,9 +52,7 @@
                     <input type="text" name="message" placeholder="Type Message ..." class="form-control" v-model="message" @keyup.enter.prevent="send">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-warning btn-flat" @click.prevent="send" >Send</button>
-                    </span>
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-info btn-flat" @click.prevent="sendFile"><i class="fa fa-paperclip"></i></button>
+                        <!--<button type="button" class="btn btn-info btn-flat" @click.prevent="sendFile"><i class="fa fa-paperclip"></i></button>-->
                     </span>
                 </div>
             </div>
@@ -67,6 +66,8 @@
         </button>
         <button @click="viewHtmlChat" class="btn btn-success fa  fa-print"></button>
         <button @click="downloadPdf" class="btn btn-warning fa  fa-file-pdf-o"></button>
+        <button v-if="isFirefox" @click="escoltarXat(0)" class="btn btn-info fa fa-bullhorn"></button>
+        <audio id="audio" preload="auto" :src="srcAudioUrl" hidden></audio>
     </div>
 </template>
 
@@ -76,13 +77,16 @@
   export default {
     data() {
       return {
+        isChrome: null,
+        isFirefox: null,
         loading: false,
         isPushEnabled: false,
         pushButtonDisabled: true,
         internalMessages: this.chat.messages,
         participants: [],
         message:'',
-        logged_user: JSON.parse(window.user)
+        logged_user: JSON.parse(window.user),
+        srcAudioUrl:''
       }
     },
     props: {
@@ -219,6 +223,41 @@
       own(message) {
         return message.user.id === this.logged_user.id
       },
+      escoltarXat(index) {
+        var text = ''
+        var numMessatges = this.internalMessages.length
+        text = text+' '+ this.internalMessages[index].user.name + ' diu '+ this.internalMessages[index].body
+        this.playMessageAsAudio(text,false)
+        setTimeout(() => {
+          var audio = document.getElementById('audio')
+          audio.play()
+            setTimeout(() => {
+              audio.pause()
+              audio.currentTime = 0
+              if (index+1 != numMessatges){
+                this.escoltarXat(index+1)
+              }
+            },audio.duration*1000)
+        },500)
+      },
+      playMessageAsAudio(text,play) {
+        var url
+        if (this.isFirefox){
+          text = encodeURIComponent(text)
+          url = "https://translate.google.com/translate_tts?ie=UTF-8&q=" + text + "&tl=es&client=tw-ob"
+          this.srcAudioUrl = url
+          setTimeout(() => {
+            var audio = document.getElementById('audio')
+            if (play){
+              audio.play()
+              setTimeout(() => {
+                audio.pause()
+                audio.currentTime = 0
+              },audio.duration*1000)
+            }
+          },500)
+        }
+      },
       sendFile(){
 
       },
@@ -308,6 +347,8 @@
       }
     },
     mounted () {
+      this.isFirefox = typeof InstallTrigger !== 'undefined'
+      this.isChrome = !!window.chrome && !!window.chrome.webstore
       this.scroll_top_down()
       this.registerServiceWorker()
       Echo.join('newChatMessage.'+this.chat.id)

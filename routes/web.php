@@ -36,6 +36,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/notifications/{notification}/read','ReadNotificationController@update');
 
+    Route::post('/recording', ['as' => 'post.recording', 'uses' => 'RecordingController@postRecording']);
+    Route::get('/recording/{id}', ['as' => 'get.recording', 'uses' => 'RecordingController@getRecording']);
+
 });
 
 // Push Subscriptions

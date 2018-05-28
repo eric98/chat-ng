@@ -16,6 +16,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('chat', require('./components/ChatComponent.vue'));
+Vue.component('record-voice', require('./components/RecordingComponent.vue'));
 Vue.component('statistics-chart', require('./components/StatisticsChartComponent.vue'));
 Vue.component('chat-messages-notifications', require('./components/ChatMessagesNotificationsComponent.vue'));
 
