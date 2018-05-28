@@ -258,9 +258,9 @@
           },500)
         }
       },
-      sendFile(){
-
-      },
+//      sendFile(){
+//
+//      },
       send() {
         axios.post('/chat/' + this.chat.id + '/message', {
           'body': this.message,
